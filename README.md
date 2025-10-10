@@ -8,16 +8,15 @@ This repository contains our OOP game project. Please follow the branching rules
 - **feature/<name>** → for individual features or fixes. Each member should create their own branch.
 
 ## 🚀 Workflow
-1. Make sure you are up to date:
+1. Make sure you are up to date, then create a new branch for your task, commit your changes, and push:
    ```bash
    git checkout dev
    git pull
-2. Create a new branch for your task:
    git checkout -b feature/<your-feature>
-   Example: feature/player-movement
-   After coding, commit your changes:
+   # Example:
+   # git checkout -b feature/player-movement
+
+   # After coding
    git add .
    git commit -m "feat: add player movement"
-   Push your branch:
    git push origin feature/<your-feature>
-
