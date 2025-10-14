@@ -1,0 +1,36 @@
+@page "{operation}"
+@model DifficultyModel
+@{
+    ViewData["Title"] = "Choose Difficulty";
+}
+
+<div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; background:linear-gradient(135deg, #a8edea, #fed6e3);">
+    <h1 style="font-size:2.5rem; color:#333; font-weight:bold;">Choose Difficulty</h1>
+    <h3 style="color:#555; margin-top:10px;">Operation: <span style="color:#ff5f7e;">@Model.Operation</span></h3>
+
+    <div style="display:flex; gap:25px; margin-top:40px;">
+        <a asp-page="/Game" asp-route-operation="@Model.Operation" asp-route-difficulty="easy" class="diff-btn" style="background:#90EE90;">😄 Easy</a>
+        <a asp-page="/Game" asp-route-operation="@Model.Operation" asp-route-difficulty="medium" class="diff-btn" style="background:#FFD700;">😐 Medium</a>
+        <a asp-page="/Game" asp-route-operation="@Model.Operation" asp-route-difficulty="hard" class="diff-btn" style="background:#FF6347;">😤 Hard</a>
+    </div>
+
+    <a asp-page="/Operations" style="margin-top:50px; color:#333; text-decoration:underline;">⬅ Back</a>
+</div>
+
+<style>
+    .diff-btn {
+        padding:15px 30px;
+        border-radius:25px;
+        text-decoration:none;
+        font-size:1.3rem;
+        font-weight:bold;
+        color:white;
+        box-shadow:0 4px 8px rgba(0,0,0,0.2);
+        transition:transform 0.2s, box-shadow 0.2s;
+    }
+
+    .diff-btn:hover {
+        transform:translateY(-4px);
+        box-shadow:0 6px 12px rgba(0,0,0,0.3);
+    }
+</style>

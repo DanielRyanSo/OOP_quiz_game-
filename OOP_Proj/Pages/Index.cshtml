@@ -1,0 +1,20 @@
+@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Math Game";
+}
+
+<div style="text-align:center; margin-top:100px; font-family:Arial;">
+    <h1>🎮 Welcome to Math Challenge!</h1>
+    <p>Test your brain with fun math problems!</p>
+
+    <a asp-page="/Operations" style="
+        background:#4CAF50;
+        color:white;
+        padding:15px 30px;
+        border-radius:10px;
+        text-decoration:none;
+        font-size:18px;">
+        ▶ Play Game
+    </a>
+</div>

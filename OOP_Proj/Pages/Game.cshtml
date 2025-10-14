@@ -1,0 +1,67 @@
+@page "{operation}/{difficulty}"
+@model GameModel
+@{
+    ViewData["Title"] = "Math Game";
+}
+
+<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;
+            height:100vh;background:linear-gradient(135deg,#d4fc79,#96e6a1);
+            font-family:Arial;text-align:center;">
+
+    @if (!Model.GameOver)
+    {
+        <h1 style="font-size:2rem;color:#333;font-weight:bold;margin-bottom:10px;">
+            @Model.Difficulty.ToUpper() - @Model.Operation.ToUpper()
+        </h1>
+
+        <h3>Question @Model.QuestionNumber of 10</h3>
+        <h2 style="font-size:2.5rem;color:#222;margin:10px 0;">
+            @Model.Number1 @Model.Symbol @Model.Number2 = ?
+        </h2>
+
+        <form method="post">
+            <div style="display:grid;grid-template-columns:repeat(2,150px);gap:20px;margin-top:20px;">
+                @for (int i = 0; i < Model.Choices.Count; i++)
+                {
+                    <button type="submit" name="SelectedAnswer" value="@Model.Choices[i]"
+                            style="padding:15px;border:none;border-radius:15px;background:#fff;
+                                   font-size:1.2rem;box-shadow:0 4px 8px rgba(0,0,0,0.2);
+                                   transition:transform .2s;cursor:pointer;">
+                        @Model.Choices[i]
+                    </button>
+                }
+            </div>
+        </form>
+
+        @if (Model.Feedback != null)
+        {
+            <p style="margin-top:25px;font-size:1.3rem;">@Model.Feedback</p>
+            <form method="post">
+                <button type="submit" name="Next" value="true"
+                        style="margin-top:10px;padding:10px 25px;border:none;border-radius:10px;
+                               background:#4CAF50;color:#fff;font-weight:bold;cursor:pointer;">
+                    Next Question
+                </button>
+            </form>
+        }
+
+        <h3 style="margin-top:25px;">Score: @Model.Score</h3>
+    }
+    else
+    {
+        <h1>🎉 Game Over!</h1>
+        <h2>Your Final Score: @Model.Score / 10</h2>
+
+        <div style="display:flex;gap:20px;margin-top:25px;">
+            <a asp-page="/Game"
+               asp-route-operation="@Model.Operation"
+               asp-route-difficulty="@Model.Difficulty"
+               style="padding:12px 25px;border-radius:10px;background:#4CAF50;color:#fff;
+                      text-decoration:none;font-weight:bold;">🔁 Play Again</a>
+
+            <a asp-page="/Operations"
+               style="padding:12px 25px;border-radius:10px;background:#2196F3;color:#fff;
+                      text-decoration:none;font-weight:bold;">🏠 Back to Menu</a>
+        </div>
+    }
+</div>
