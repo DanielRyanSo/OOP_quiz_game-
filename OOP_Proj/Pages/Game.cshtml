@@ -4,64 +4,477 @@
     ViewData["Title"] = "Math Game";
 }
 
-<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;
-            height:100vh;background:linear-gradient(135deg,#d4fc79,#96e6a1);
-            font-family:Arial;text-align:center;">
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
 
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        position: relative;
+    }
+
+    /* Floating math symbols animation */
+    .floating-symbols {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        z-index: 0;
+    }
+
+    .symbol {
+        position: absolute;
+        font-size: 40px;
+        color: rgba(255, 255, 255, 0.1);
+        animation: float 15s infinite;
+        font-weight: bold;
+    }
+
+    .symbol:nth-child(1) { left: 10%; animation-delay: 0s; }
+    .symbol:nth-child(2) { left: 20%; animation-delay: 2s; }
+    .symbol:nth-child(3) { left: 30%; animation-delay: 4s; }
+    .symbol:nth-child(4) { left: 40%; animation-delay: 1s; }
+    .symbol:nth-child(5) { left: 50%; animation-delay: 3s; }
+    .symbol:nth-child(6) { left: 60%; animation-delay: 5s; }
+    .symbol:nth-child(7) { left: 70%; animation-delay: 2.5s; }
+    .symbol:nth-child(8) { left: 80%; animation-delay: 4.5s; }
+
+    @@keyframes float {
+        0% {
+            transform: translateY(100vh) rotate(0deg);
+            opacity: 0;
+        }
+        10% {
+            opacity: 1;
+        }
+        90% {
+            opacity: 1;
+        }
+        100% {
+            transform: translateY(-100px) rotate(360deg);
+            opacity: 0;
+        }
+    }
+
+    .game-container {
+        background: white;
+        border-radius: 30px;
+        padding: 50px 60px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        text-align: center;
+        max-width: 700px;
+        width: 90%;
+        position: relative;
+        z-index: 1;
+        animation: slideIn 0.6s ease-out;
+    }
+
+    @@keyframes slideIn {
+        from {
+            transform: translateY(-50px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .game-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .game-info {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 25px;
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .progress-bar {
+        width: 100%;
+        height: 10px;
+        background: #e0e7ff;
+        border-radius: 10px;
+        overflow: hidden;
+        margin-bottom: 20px;
+    }
+
+    .progress-fill {
+        height: 100%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        transition: width 0.5s ease;
+        border-radius: 10px;
+    }
+
+    .question-display {
+        font-size: 48px;
+        color: #667eea;
+        font-weight: bold;
+        margin: 30px 0;
+        letter-spacing: 8px;
+        animation: questionPop 0.5s ease;
+    }
+
+    @@keyframes questionPop {
+        0% {
+            transform: scale(0.8);
+            opacity: 0;
+        }
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    .choices-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+        margin: 30px 0;
+    }
+
+    .choice-btn {
+        padding: 25px 20px;
+        border: 3px solid #e0e7ff;
+        border-radius: 20px;
+        background: linear-gradient(135deg, #f6f8ff 0%, #ffffff 100%);
+        font-size: 28px;
+        font-weight: bold;
+        color: #667eea;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+    }
+
+    .choice-btn:hover {
+        transform: translateY(-5px);
+        border-color: #667eea;
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+
+    .choice-btn:active {
+        transform: translateY(-2px);
+    }
+
+    .feedback-section {
+        margin-top: 30px;
+        animation: fadeIn 0.5s ease;
+    }
+
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .feedback-message {
+        font-size: 24px;
+        font-weight: bold;
+        padding: 15px 30px;
+        border-radius: 15px;
+        display: inline-block;
+        margin-bottom: 15px;
+    }
+
+    .feedback-correct {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+    }
+
+    .feedback-incorrect {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        color: white;
+    }
+
+    .next-btn {
+        padding: 15px 40px;
+        border: none;
+        border-radius: 25px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        font-weight: bold;
+        font-size: 18px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+
+    .next-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+    }
+
+    .score-display {
+        font-size: 20px;
+        color: #667eea;
+        font-weight: bold;
+        background: #f6f8ff;
+        padding: 12px 25px;
+        border-radius: 25px;
+        display: inline-block;
+    }
+
+    /* Game Over Styles */
+    .game-over-container {
+        text-align: center;
+    }
+
+    .game-over-title {
+        font-size: 60px;
+        margin-bottom: 20px;
+        animation: bounce 1s ease;
+    }
+
+    @@keyframes bounce {
+        0%, 100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-20px);
+        }
+    }
+
+    .final-score {
+        font-size: 36px;
+        color: #667eea;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .score-message {
+        font-size: 20px;
+        color: #666;
+        margin-bottom: 40px;
+    }
+
+    .game-over-buttons {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .game-over-btn {
+        padding: 15px 30px;
+        border-radius: 25px;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 18px;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .btn-play-again {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+        box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+    }
+
+    .btn-play-again:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+    }
+
+    .btn-menu {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-menu:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+    }
+
+    @@media (max-width: 768px) {
+        .game-container {
+            padding: 40px 30px;
+            margin: 20px;
+        }
+
+        .question-display {
+            font-size: 36px;
+            letter-spacing: 4px;
+        }
+
+        .choices-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .choice-btn {
+            font-size: 24px;
+        }
+
+        .game-over-title {
+            font-size: 48px;
+        }
+
+        .final-score {
+            font-size: 28px;
+        }
+    }
+</style>
+
+<div class="floating-symbols">
+    <div class="symbol">+</div>
+    <div class="symbol">−</div>
+    <div class="symbol">×</div>
+    <div class="symbol">÷</div>
+    <div class="symbol">=</div>
+    <div class="symbol">∑</div>
+    <div class="symbol">π</div>
+    <div class="symbol">∞</div>
+</div>
+
+<div class="game-container">
     @if (!Model.GameOver)
     {
-        <h1 style="font-size:2rem;color:#333;font-weight:bold;margin-bottom:10px;">
-            @Model.Difficulty.ToUpper() - @Model.Operation.ToUpper()
-        </h1>
+        <div class="game-header">
+            <div class="game-info">
+                <span style="text-transform: capitalize;">@Model.Difficulty</span>
+                <span>•</span>
+                <span style="text-transform: capitalize;">@Model.Operation</span>
+            </div>
+            <div class="game-info">
+                Question @Model.QuestionNumber / 10
+            </div>
+        </div>
 
-        <h3>Question @Model.QuestionNumber of 10</h3>
-        <h2 style="font-size:2.5rem;color:#222;margin:10px 0;">
+        <div class="progress-bar">
+            <div class="progress-fill" style="width: @((Model.QuestionNumber - 1) * 10)%"></div>
+        </div>
+
+        <div class="question-display">
             @Model.Number1 @Model.Symbol @Model.Number2 = ?
-        </h2>
+        </div>
 
-        <form method="post">
-            <div style="display:grid;grid-template-columns:repeat(2,150px);gap:20px;margin-top:20px;">
+        @if (Model.Feedback == null)
+        {
+            <form method="post">
+                <!-- Hidden fields to preserve game state -->
+                <input type="hidden" name="QuestionNumber" value="@Model.QuestionNumber" />
+                <input type="hidden" name="Score" value="@Model.Score" />
+                <input type="hidden" name="Number1" value="@Model.Number1" />
+                <input type="hidden" name="Number2" value="@Model.Number2" />
                 @for (int i = 0; i < Model.Choices.Count; i++)
                 {
-                    <button type="submit" name="SelectedAnswer" value="@Model.Choices[i]"
-                            style="padding:15px;border:none;border-radius:15px;background:#fff;
-                                   font-size:1.2rem;box-shadow:0 4px 8px rgba(0,0,0,0.2);
-                                   transition:transform .2s;cursor:pointer;">
-                        @Model.Choices[i]
-                    </button>
+                    <input type="hidden" name="Choices[@i]" value="@Model.Choices[i]" />
                 }
-            </div>
-        </form>
-
-        @if (Model.Feedback != null)
-        {
-            <p style="margin-top:25px;font-size:1.3rem;">@Model.Feedback</p>
-            <form method="post">
-                <button type="submit" name="Next" value="true"
-                        style="margin-top:10px;padding:10px 25px;border:none;border-radius:10px;
-                               background:#4CAF50;color:#fff;font-weight:bold;cursor:pointer;">
-                    Next Question
-                </button>
+                
+                <div class="choices-grid">
+                    @for (int i = 0; i < Model.Choices.Count; i++)
+                    {
+                        <button type="submit" name="SelectedAnswer" value="@Model.Choices[i]" class="choice-btn">
+                            @Model.Choices[i]
+                        </button>
+                    }
+                </div>
             </form>
         }
 
-        <h3 style="margin-top:25px;">Score: @Model.Score</h3>
+        @if (Model.Feedback != null)
+        {
+            <div class="feedback-section">
+                <div class="feedback-message @(Model.Feedback.Contains("Correct") || Model.Feedback.Contains("✓") ? "feedback-correct" : "feedback-incorrect")">
+                    @Model.Feedback
+                </div>
+                <form method="post">
+                    <!-- Hidden fields to preserve game state -->
+                    <input type="hidden" name="QuestionNumber" value="@Model.QuestionNumber" />
+                    <input type="hidden" name="Score" value="@Model.Score" />
+                    <input type="hidden" name="Number1" value="@Model.Number1" />
+                    <input type="hidden" name="Number2" value="@Model.Number2" />
+                    @for (int i = 0; i < Model.Choices.Count; i++)
+                    {
+                        <input type="hidden" name="Choices[@i]" value="@Model.Choices[i]" />
+                    }
+                    
+                    <button type="submit" name="Next" value="true" class="next-btn">
+                        Next Question →
+                    </button>
+                </form>
+            </div>
+        }
+
+        <div style="margin-top: 30px;">
+            <div class="score-display">
+                🏆 Score: @Model.Score / 10
+            </div>
+        </div>
     }
     else
     {
-        <h1>🎉 Game Over!</h1>
-        <h2>Your Final Score: @Model.Score / 10</h2>
+        <div class="game-over-container">
+            <div class="game-over-title">🎉</div>
+            <h1 style="font-size: 42px; color: #667eea; font-weight: bold; margin-bottom: 20px;">
+                Game Complete!
+            </h1>
+            <div class="final-score">
+                Final Score: @Model.Score / 10
+            </div>
+            <p class="score-message">
+                @if (Model.Score == 10)
+                {
+                    <text>🌟 Perfect! You're a math genius!</text>
+                }
+                else if (Model.Score >= 7)
+                {
+                    <text>🎯 Excellent work! Keep it up!</text>
+                }
+                else if (Model.Score >= 5)
+                {
+                    <text>💪 Good effort! Practice makes perfect!</text>
+                }
+                else
+                {
+                    <text>📚 Keep practicing! You'll improve!</text>
+                }
+            </p>
 
-        <div style="display:flex;gap:20px;margin-top:25px;">
-            <a asp-page="/Game"
-               asp-route-operation="@Model.Operation"
-               asp-route-difficulty="@Model.Difficulty"
-               style="padding:12px 25px;border-radius:10px;background:#4CAF50;color:#fff;
-                      text-decoration:none;font-weight:bold;">🔁 Play Again</a>
+            <div class="game-over-buttons">
+                <a asp-page="/Game"
+                   asp-route-operation="@Model.Operation"
+                   asp-route-difficulty="@Model.Difficulty"
+                   class="game-over-btn btn-play-again">
+                    <span>🔁</span>
+                    <span>Play Again</span>
+                </a>
 
-            <a asp-page="/Operations"
-               style="padding:12px 25px;border-radius:10px;background:#2196F3;color:#fff;
-                      text-decoration:none;font-weight:bold;">🏠 Back to Menu</a>
+                <a asp-page="/Operations"
+                   class="game-over-btn btn-menu">
+                    <span>🏠</span>
+                    <span>Back to Menu</span>
+                </a>
+            </div>
         </div>
     }
 </div>
