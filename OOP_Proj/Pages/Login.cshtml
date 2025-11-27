@@ -1,0 +1,12 @@
+@page
+@model OOP_Proj.Pages.LoginModel
+<h2>Login</h2>
+
+<form method="post">
+    <input asp-for="Username" placeholder="Username" required /><br />
+    <input asp-for="Password" type="password" placeholder="Password" required /><br />
+    <button type="submit">Login</button>
+</form>
+
+<p>@Model.Message</p>
+<a href="/Register">Register</a>

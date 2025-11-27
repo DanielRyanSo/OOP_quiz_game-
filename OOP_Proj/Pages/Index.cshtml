@@ -1,5 +1,5 @@
 @page
-@model IndexModel
+@model OOP_Proj.Pages.IndexModel
 @{
     ViewData["Title"] = "Math Game";
 }
@@ -203,8 +203,44 @@
             flex-direction: column;
         }
     }
+
+    .top-bar {
+        position: absolute;
+        top: 20px;
+        right: 30px;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: bold;
+        color: white;
+        font-size: 16px;
+    }
+
+    .logout-button {
+        background: rgba(255,255,255,0.2);
+        color: white;
+        border: none;
+        padding: 5px 12px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .logout-button:hover {
+        background: rgba(255,255,255,0.4);
+    }
 </style>
 
+<!-- Top bar -->
+<div class="top-bar">
+    <span>Hello, @Model.Username</span>
+    <form method="post" style="display:inline">
+        <button type="submit" asp-page-handler="Logout" class="logout-button">Logout</button>
+    </form>
+</div>
+
+<!-- Existing floating symbols & game container -->
 <div class="floating-symbols">
     <div class="symbol">+</div>
     <div class="symbol">−</div>

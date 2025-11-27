@@ -1,8 +1,28 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-public class IndexModel : PageModel
+namespace OOP_Proj.Pages
 {
-    public void OnGet()
+    public class IndexModel : PageModel
     {
+        public string Username { get; set; } = "";
+
+        public IActionResult OnGet()
+        {
+            var username = HttpContext.Session.GetString("Username");
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToPage("/Login");
+            }
+
+            Username = username;
+            return Page();
+        }
+
+        public IActionResult OnPostLogout()
+        {
+            HttpContext.Session.Remove("Username");
+            return RedirectToPage("/Login");
+        }
     }
 }
