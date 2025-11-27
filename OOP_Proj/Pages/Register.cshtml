@@ -1,12 +1,86 @@
 @page
 @model OOP_Proj.Pages.RegisterModel
-<h2>Register</h2>
+@{
+    ViewData["Title"] = "Register";
+}
 
-<form method="post">
-    <input asp-for="Username" placeholder="Username" required /><br />
-    <input asp-for="Password" type="password" placeholder="Password" required /><br />
-    <button type="submit">Register</button>
-</form>
+<style>
+    body {
+        margin: 0;
+        font-family: 'Segoe UI', sans-serif;
+        background: linear-gradient(135deg, #764ba2, #667eea);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
 
-<p>@Model.Message</p>
-<a href="/Login">Login</a>
+    .container {
+        background: #fff;
+        padding: 50px;
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+        width: 350px;
+        text-align: center;
+    }
+
+    h2 {
+        color: #764ba2;
+        margin-bottom: 30px;
+    }
+
+    input[type="text"], input[type="password"] {
+        width: 100%;
+        padding: 15px;
+        margin: 10px 0;
+        border-radius: 10px;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+    }
+
+    button {
+        width: 100%;
+        padding: 15px;
+        margin-top: 20px;
+        border-radius: 10px;
+        border: none;
+        background: #764ba2;
+        color: #fff;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+    button:hover {
+        background: #667eea;
+    }
+
+    .login-link {
+        margin-top: 15px;
+        display: block;
+        color: #667eea;
+        cursor: pointer;
+        text-decoration: underline;
+    }
+
+    .message {
+        color: red;
+        margin-top: 10px;
+        font-weight: bold;
+    }
+</style>
+
+<div class="container">
+    <h2>Register</h2>
+    <form method="post">
+        <input asp-for="Username" placeholder="Username" />
+        <input asp-for="Password" type="password" placeholder="Password" />
+        <input asp-for="ConfirmPassword" type="password" placeholder="Confirm Password" />
+        <button type="submit">Register</button>
+    </form>
+    <a asp-page="/Login" class="login-link">Already have an account? Login</a>
+    @if (!string.IsNullOrEmpty(Model.Message))
+    {
+        <div class="message">@Model.Message</div>
+    }
+</div>
