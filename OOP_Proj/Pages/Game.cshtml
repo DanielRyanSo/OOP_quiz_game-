@@ -1,7 +1,7 @@
 @page "{operation}/{difficulty}"
 @model GameModel
 @{
-    ViewData["Title"] = "Math Game";
+    ViewData["Title"] = "Math Blitz";
 }
 
 <style>
@@ -108,6 +108,11 @@
         border-radius: 25px;
         font-size: 16px;
         font-weight: bold;
+    }
+
+    .timer-info {
+        background: #111827;
+        color: #e5e7eb;
     }
 
     .progress-bar {
@@ -241,6 +246,24 @@
         display: inline-block;
     }
 
+    .exit-btn {
+        margin-top: 15px;
+        display: inline-block;
+        padding: 10px 25px;
+        border-radius: 20px;
+        background: #f97373;
+        color: #1f2937;
+        text-decoration: none;
+        font-weight: bold;
+        box-shadow: 0 4px 12px rgba(248, 113, 113, 0.4);
+        transition: all 0.2s ease;
+    }
+
+    .exit-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(248, 113, 113, 0.6);
+    }
+
     /* Game Over Styles */
     .game-over-container {
         text-align: center;
@@ -274,24 +297,26 @@
         margin-bottom: 40px;
     }
 
-    .game-over-buttons {
-        display: flex;
-        gap: 15px;
-        justify-content: center;
-        flex-wrap: wrap;
-    }
+.game-over-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;               /* smaller spacing */
+    flex-wrap: nowrap;       /* PREVENT wrapping → forces 1 line */
+    margin-top: 20px;
+}
 
-    .game-over-btn {
-        padding: 15px 30px;
-        border-radius: 25px;
-        text-decoration: none;
-        font-weight: bold;
-        font-size: 18px;
-        transition: all 0.3s ease;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-    }
+.game-over-btn {
+    padding: 12px 25px;      /* slightly smaller */
+    border-radius: 20px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 18px;
+    min-width: 140px;        /* reduced from 180–220 */
+    text-align: center;
+    transition: all 0.3s ease;
+}
 
     .btn-play-again {
         background: linear-gradient(135deg, #10b981 0%, #059669 100%);
@@ -313,6 +338,43 @@
     .btn-menu:hover {
         transform: translateY(-3px);
         box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+    }
+
+ /* Clean, bigger floating cat popup */
+.cat-popup {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 999;
+    animation: slideIn 0.3s ease-out;
+
+    /* Remove background box */
+    background: none;
+    border: none;
+    padding: 0;
+    box-shadow: none;
+
+    /* Make it big */
+    width: 260px; /* adjust if you want bigger */
+}
+
+.cat-popup img {
+    width: 100%;
+    height: auto;
+    border-radius: 20px; /* optional */
+}
+
+.cat-popup p {
+    text-align: center;
+    margin-top: 8px;
+    font-size: 20px;
+    font-weight: bold;
+    color: black; 
+}
+
+    @@keyframes slideIn {
+        from { transform: translateX(120%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
     }
 
     @@media (max-width: 768px) {
@@ -367,6 +429,14 @@
             <div class="game-info">
                 Question @Model.QuestionNumber / 10
             </div>
+            @* Timer only while answering *@
+            @if (Model.Feedback == null)
+            {
+                <div class="game-info timer-info">
+                    ⏱ Time left:
+                    <span id="timeLeft">@Model.TimeLimitSeconds</span>s
+                </div>
+            }
         </div>
 
         <div class="progress-bar">
@@ -379,12 +449,13 @@
 
         @if (Model.Feedback == null)
         {
-            <form method="post">
+            <form method="post" id="quizForm">
                 <!-- Hidden fields to preserve game state -->
                 <input type="hidden" name="QuestionNumber" value="@Model.QuestionNumber" />
                 <input type="hidden" name="Score" value="@Model.Score" />
                 <input type="hidden" name="Number1" value="@Model.Number1" />
                 <input type="hidden" name="Number2" value="@Model.Number2" />
+                <input type="hidden" name="TimeUp" id="timeUpField" value="false" />
                 @for (int i = 0; i < Model.Choices.Count; i++)
                 {
                     <input type="hidden" name="Choices[@i]" value="@Model.Choices[i]" />
@@ -393,7 +464,10 @@
                 <div class="choices-grid">
                     @for (int i = 0; i < Model.Choices.Count; i++)
                     {
-                        <button type="submit" name="SelectedAnswer" value="@Model.Choices[i]" class="choice-btn">
+                        <button type="submit"
+                                name="SelectedAnswer"
+                                value="@Model.Choices[i]"
+                                class="choice-btn">
                             @Model.Choices[i]
                         </button>
                     }
@@ -407,6 +481,21 @@
                 <div class="feedback-message @(Model.Feedback.Contains("Correct") || Model.Feedback.Contains("✓") ? "feedback-correct" : "feedback-incorrect")">
                     @Model.Feedback
                 </div>
+
+                <!-- Cat meme popup -->
+           <div class="cat-popup">
+    <img src="@(Model.IsCorrectAnswer 
+        ? "https://media.tenor.com/43RlWoIw0u8AAAAj/cat.gif"
+        : "https://media.tenor.com/CfAOsEQu5IIAAAAj/3d-cat.gif")"
+        alt="Cat reaction GIF" />
+
+    <p>
+        @(Model.IsCorrectAnswer 
+            ? "Purr-fect! Great job! 🐾" 
+            : "Oops! You'll get it next time! 🐾")
+    </p>
+</div>
+
                 <form method="post">
                     <!-- Hidden fields to preserve game state -->
                     <input type="hidden" name="QuestionNumber" value="@Model.QuestionNumber" />
@@ -428,6 +517,9 @@
         <div style="margin-top: 30px;">
             <div class="score-display">
                 🏆 Score: @Model.Score / 10
+            </div>
+            <div>
+                <a asp-page="/Index" class="exit-btn">Exit</a>
             </div>
         </div>
     }
@@ -478,3 +570,32 @@
         </div>
     }
 </div>
+
+@if (!Model.GameOver && Model.Feedback == null)
+{
+    <script>
+        (function () {
+            var timeLeftSpan = document.getElementById('timeLeft');
+            var timeUpField = document.getElementById('timeUpField');
+            var form = document.getElementById('quizForm');
+
+            var timeRemaining = @Model.TimeLimitSeconds;
+            var interval = setInterval(function () {
+                timeRemaining--;
+                if (timeLeftSpan) {
+                    timeLeftSpan.textContent = timeRemaining;
+                }
+
+                if (timeRemaining <= 0) {
+                    clearInterval(interval);
+                    if (timeUpField) {
+                        timeUpField.value = 'true';
+                    }
+                    if (form) {
+                        form.submit();
+                    }
+                }
+            }, 1000);
+        })();
+    </script>
+}
