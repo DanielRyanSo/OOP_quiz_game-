@@ -7,8 +7,275 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/OOP_Proj.styles.css" asp-append-version="true" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f3460 0%, #16213e 25%, #1a3a52 50%, #0d1f2d 75%, #050a0f 100%);
+            background-attachment: fixed;
+            animation: pageLoad 0.6s ease-in-out;
+            position: relative;
+        }
+
+        .symbol {
+            position: fixed;
+            font-size: 40px;
+            color: rgba(255, 255, 255, 0.1);
+            animation: float 20s infinite linear;
+            font-weight: bold;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .symbol:nth-child(1) { left: 5%; top: 10%; animation-delay: 0s; animation-duration: 20s; }
+        .symbol:nth-child(2) { left: 15%; top: 50%; animation-delay: 2s; animation-duration: 22s; }
+        .symbol:nth-child(3) { left: 25%; top: 80%; animation-delay: 4s; animation-duration: 24s; }
+        .symbol:nth-child(4) { left: 40%; top: 20%; animation-delay: 1s; animation-duration: 25s; }
+        .symbol:nth-child(5) { left: 55%; top: 60%; animation-delay: 3s; animation-duration: 23s; }
+        .symbol:nth-child(6) { left: 70%; top: 30%; animation-delay: 5s; animation-duration: 26s; }
+        .symbol:nth-child(7) { left: 80%; top: 70%; animation-delay: 2.5s; animation-duration: 21s; }
+        .symbol:nth-child(8) { left: 90%; top: 40%; animation-delay: 4.5s; animation-duration: 24s; }
+
+        @@keyframes float {
+            0% {
+                transform: translateY(0) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            5% {
+                opacity: 1;
+            }
+            95% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        @@keyframes pageLoad {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        main {
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @@keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Global Character System */
+        .character-container {
+            position: fixed;
+            left: 20px;
+            bottom: 20px;
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 15px;
+            pointer-events: none;
+        }
+
+        .speech-bubble {
+            background: white;
+            border-radius: 15px;
+            padding: 15px 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            max-width: 220px;
+            text-align: center;
+            font-weight: 600;
+            color: #1976d2;
+            font-size: 15px;
+            line-height: 1.4;
+            animation: bubbleAppear 0.4s ease-out;
+            pointer-events: auto;
+            border: 2px solid #1976d2;
+            position: relative;
+        }
+
+        .speech-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 20px;
+            width: 0;
+            height: 0;
+            border-right: 10px solid transparent;
+            border-left: 0px solid transparent;
+            border-top: 10px solid white;
+        }
+
+        .speech-bubble::before {
+            content: '';
+            position: absolute;
+            bottom: -14px;
+            left: 18px;
+            width: 0;
+            height: 0;
+            border-right: 12px solid transparent;
+            border-left: 0px solid transparent;
+            border-top: 12px solid #1976d2;
+        }
+
+        @@keyframes bubbleAppear {
+            from {
+                opacity: 0;
+                transform: scale(0.8) translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateX(0);
+            }
+        }
+
+        .character {
+            width: 220px;
+            height: 220px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 140px;
+            box-shadow: 0 12px 36px rgba(102, 126, 234, 0.45);
+            animation: characterBounce 2s infinite;
+            border: 4px solid white;
+            flex-shrink: 0;
+            z-index: 9999;
+        }
+
+        @@keyframes characterBounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @@media (max-width: 1024px) {
+            .character-container {
+                left: 10px;
+                bottom: 10px;
+            }
+
+            .character {
+                width: 140px;
+                height: 140px;
+                font-size: 85px;
+            }
+
+            .speech-bubble {
+                max-width: 180px;
+                font-size: 14px;
+                padding: 12px 15px;
+            }
+        }
+
+        @@media (max-width: 768px) {
+            .character-container {
+                left: 10px;
+                bottom: 10px;
+            }
+
+            .character {
+                width: 130px;
+                height: 130px;
+                font-size: 80px;
+            }
+
+            .speech-bubble {
+                max-width: 160px;
+                font-size: 13px;
+                padding: 12px 15px;
+            }
+        }
+
+        @@media (max-width: 480px) {
+            .character-container {
+                left: 5px;
+                bottom: 5px;
+            }
+
+            .character {
+                width: 100px;
+                height: 100px;
+                font-size: 65px;
+            }
+
+            .speech-bubble {
+                max-width: 140px;
+                font-size: 12px;
+                padding: 10px 12px;
+            }
+        }
+        
+        /* Global transition overlay to mask white flashes during targeted navigations */
+        .page-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 400; /* below the character so robot remains visible */
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.36s ease;
+            background: linear-gradient(135deg, rgba(15,52,96,0.95) 0%, rgba(5,10,15,0.95) 100%);
+        }
+
+        .page-overlay.active {
+            pointer-events: auto;
+            opacity: 1;
+        }
+
+        body.fade-page {
+            transition: opacity 0.36s ease;
+            opacity: 0.02; /* keep slightly visible to avoid full white */
+        }
+    </style>
 </head>
-<body style="background-color: #f9fafb;">
+<body>
+    <div class="symbol">+</div>
+    <div class="symbol">−</div>
+    <div class="symbol">×</div>
+    <div class="symbol">÷</div>
+    <div class="symbol">=</div>
+    <div class="symbol">∑</div>
+    <div class="symbol">π</div>
+    <div class="symbol">∞</div>
+
+    <!-- Global page overlay used for smooth transitions on targeted navigation -->
+    <div id="globalPageOverlay" class="page-overlay" aria-hidden="true"></div>
+
+    <!-- Global Character with Speech Bubble -->
+    <div class="character-container" id="characterContainer">
+        <div class="speech-bubble" id="speechBubble" style="display: none;"></div>
+        <div class="character">🤖</div>
+    </div>
+
     <main role="main" class="pb-3">
         @RenderBody()
     </main>
@@ -17,5 +284,156 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+
+    <script>
+        // Global Character System
+        class CharacterMessenger {
+            constructor() {
+                this.bubble = document.getElementById('speechBubble');
+                this.container = document.getElementById('characterContainer');
+                this.timeout = null;
+            }
+
+            show(message, duration = 4000) {
+                if (this.timeout) clearTimeout(this.timeout);
+                this.bubble.textContent = message;
+                this.bubble.style.display = 'block';
+                this.timeout = setTimeout(() => this.hide(), duration);
+            }
+
+            hide() {
+                this.bubble.style.display = 'none';
+            }
+
+            // Page-specific messages
+            showLoginMessage() {
+                this.show('👋 Login to continue!\nNo account? Register!', 4000);
+            }
+
+            showRegisterMessage() {
+                this.show('✍️ Create your account\nJoin the math challenge!', 4000);
+            }
+
+            showLoginSuccess(username) {
+                this.show(`👋 Welcome ${username}!\nGreat to see you!`, 4000);
+            }
+
+            showIndexPage(username) {
+                this.show(`👋 Welcome ${username}!\nReady to play?`, 4000);
+            }
+
+            showCorrectAnswer() {
+                const messages = [
+                    '🎉 Amazing!\nYou\'re a genius!',
+                    '⭐ Wow!\nIncredible!',
+                    '✨ Nice!\nYou got it!',
+                    '🚀 Excellent!\nKeep it up!'
+                ];
+                const msg = messages[Math.floor(Math.random() * messages.length)];
+                this.show(msg, 3500);
+            }
+
+            showWrongAnswer() {
+                const messages = [
+                    '😅 Ah, too bad!\nStudy more haha!',
+                    '🤔 Not quite...\nTry again!',
+                    '💭 Close one!\nKeep going!',
+                    '📚 Oops!\nYou\'ll get it!'
+                ];
+                const msg = messages[Math.floor(Math.random() * messages.length)];
+                this.show(msg, 3500);
+            }
+
+            showGameStart() {
+                this.show('🎮 Good luck!\nShow me your skills!', 3500);
+            }
+
+            showGameComplete(score) {
+                if (score === 10) {
+                    this.show('🏆 Perfect!\n10/10!', 4000);
+                } else if (score >= 7) {
+                    this.show(`🎯 Excellent!\n${score}/10!`, 4000);
+                } else if (score >= 5) {
+                    this.show(`💪 Good job!\n${score}/10`, 4000);
+                } else {
+                    this.show(`📚 Keep trying!\n${score}/10`, 4000);
+                }
+            }
+
+            showOperationsPage() {
+                this.show('⚙️ Pick an operation\nLet\'s go!', 4000);
+            }
+
+            showDifficultyPage() {
+                this.show('🎯 Choose difficulty\nWhich level?', 4000);
+            }
+
+            showTimeWarning(seconds) {
+                this.show(`⏱️ Watch out!\n${seconds} seconds!`, 2000);
+            }
+
+            showRegisterSuccess(username) {
+                this.show(`🎉 Welcome ${username}!\nReady to play?`, 4000);
+            }
+        }
+
+        // Initialize global messenger
+        window.character = new CharacterMessenger();
+
+        // Auto-show messages based on page
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentPage = window.location.pathname;
+            
+            if (currentPage.includes('/Login')) {
+                window.character.showLoginMessage();
+            } else if (currentPage.includes('/Register')) {
+                window.character.showRegisterMessage();
+            } else if (currentPage.includes('/Index')) {
+                const username = document.querySelector('.top-bar span')?.textContent?.replace('Hello, ', '') || 'Friend';
+                window.character.showIndexPage(username);
+            } else if (currentPage.includes('/Operations')) {
+                window.character.showOperationsPage();
+            } else if (currentPage.includes('/Difficulty')) {
+                window.character.showDifficultyPage();
+            }
+        });
+    </script>
+    <script>
+        // Navigation transition handler: only intercept links/forms with `data-transition="true"`.
+        (function () {
+            var overlay = null;
+            function ensureOverlay() {
+                if (!overlay) overlay = document.getElementById('globalPageOverlay');
+                return overlay;
+            }
+
+            function showTransition(cb) {
+                var ov = ensureOverlay();
+                document.body.classList.add('fade-page');
+                if (ov) ov.classList.add('active');
+                setTimeout(function () {
+                    if (typeof cb === 'function') cb();
+                }, 360);
+            }
+
+            document.addEventListener('click', function (e) {
+                var a = e.target.closest && e.target.closest('a[data-transition="true"]');
+                if (!a) return;
+                // ignore external or special links
+                if (a.target === '_blank' || a.hasAttribute('download') || a.href.indexOf('javascript:') === 0) return;
+                e.preventDefault();
+                var href = a.href;
+                showTransition(function () { window.location.href = href; });
+            }, true);
+
+            // Intercept form submits with data-transition
+            document.addEventListener('submit', function (e) {
+                var f = e.target;
+                if (!(f && f.matches && f.matches('form[data-transition="true"]'))) return;
+                e.preventDefault();
+                showTransition(function () { f.submit(); });
+            }, true);
+        })();
+    </script>
 </body>
 </html>

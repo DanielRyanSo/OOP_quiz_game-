@@ -5,81 +5,209 @@
 }
 
 <style>
-    body {
+    * {
         margin: 0;
-        font-family: 'Segoe UI', sans-serif;
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
+        padding: 0;
+        box-sizing: border-box;
     }
 
+    html, body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #0f3460 0%, #16213e 25%, #1a3a52 50%, #0d1f2d 75%, #050a0f 100%);
+        background-attachment: fixed;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        position: relative;
+        animation: fadeIn 0.8s ease-in-out;
+    }
+
+    @@keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+
+
     .container {
-        background: #fff;
-        padding: 50px;
+        width: 380px;
+        padding: 40px 35px;
         border-radius: 20px;
-        box-shadow: 0 20px 60px rgba(0,0,0,0.2);
-        width: 350px;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(30px);
+        -webkit-backdrop-filter: blur(30px);
+        box-shadow: 0 15px 60px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
         text-align: center;
+        transition: all 0.3s ease;
+        position: relative;
+        z-index: 1;
+        animation: slideIn 0.6s ease-out;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    @@keyframes slideIn {
+        from {
+            transform: translateY(-50px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .container:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 70px rgba(0, 0, 0, 0.3);
+    }
+
+    .login-icon {
+        font-size: 50px;
+        margin-bottom: 15px;
+        animation: bounce 2s infinite;
+    }
+
+    @@keyframes bounce {
+        0%, 100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-10px);
+        }
     }
 
     h2 {
-        color: #667eea;
-        margin-bottom: 30px;
+        color: #64b5f6;
+        font-size: 32px;
+        margin-bottom: 25px;
+        font-weight: 700;
+        letter-spacing: 1px;
     }
 
-    input[type="text"], input[type="password"] {
+    .form-subtitle {
+        color: #666;
+        font-size: 14px;
+        margin-bottom: 25px;
+    }
+
+    .input-field {
         width: 100%;
-        padding: 15px;
-        margin: 10px 0;
-        border-radius: 10px;
-        border: 1px solid #ccc;
+        padding: 14px 18px;
+        margin: 12px 0;
+        border-radius: 12px;
+        border: 2px solid rgba(100, 181, 246, 0.3);
+        outline: none;
+        background: rgba(255, 255, 255, 0.15);
+        font-size: 16px;
+        transition: 0.3s ease;
         box-sizing: border-box;
+        color: white;
+    }
+
+    .input-field::placeholder {
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+    .input-field:focus {
+        background: rgba(100, 181, 246, 0.2);
+        border-color: #64b5f6;
+        box-shadow: 0 0 12px rgba(100, 181, 246, 0.6);
+        transform: scale(1.02);
     }
 
     button {
         width: 100%;
         padding: 15px;
-        margin-top: 20px;
-        border-radius: 10px;
+        margin-top: 18px;
+        border-radius: 12px;
         border: none;
-        background: #667eea;
+        background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
         color: #fff;
+        font-size: 17px;
         font-weight: bold;
         cursor: pointer;
-        transition: background 0.3s ease;
+        transition: 0.3s ease;
+        letter-spacing: 0.5px;
+        box-shadow: 0 4px 20px rgba(25, 118, 210, 0.4);
     }
 
     button:hover {
-        background: #764ba2;
+        transform: translateY(-3px);
+        box-shadow: 0 6px 30px rgba(100, 181, 246, 0.6);
+    }
+
+    button:active {
+        transform: translateY(-1px);
     }
 
     .register-link {
-        margin-top: 15px;
+        margin-top: 20px;
         display: block;
-        color: #764ba2;
-        cursor: pointer;
+        color: #64b5f6;
+        text-decoration: none;
+        font-size: 15px;
+        font-weight: 600;
+        transition: 0.3s ease;
+    }
+
+    .register-link:hover {
+        color: #90caf9;
         text-decoration: underline;
     }
 
     .message {
-        color: red;
-        margin-top: 10px;
+        margin-top: 15px;
+        color: #dc2626;
         font-weight: bold;
+        background: rgba(239, 68, 68, 0.1);
+        padding: 10px;
+        border-radius: 8px;
+        border-left: 4px solid #dc2626;
+    }
+
+    @@media (max-width: 600px) {
+        .container {
+            width: 90%;
+            padding: 30px 25px;
+        }
+
+        h2 {
+            font-size: 28px;
+        }
     }
 </style>
 
 <div class="container">
-    <h2>Login</h2>
+    <div class="login-icon">🔐</div>
+    <h2>Welcome Back</h2>
+    <p class="form-subtitle">Login to continue your math journey</p>
+
     <form method="post">
-        <input asp-for="Username" placeholder="Username" />
-        <input asp-for="Password" type="password" placeholder="Password" />
+        <input asp-for="Username" class="input-field" placeholder="Username" />
+        <input asp-for="Password" type="password" class="input-field" placeholder="Password" />
         <button type="submit">Login</button>
     </form>
-    <a asp-page="/Register" class="register-link">Don't have an account? Register</a>
+
+    <a asp-page="/Register" class="register-link">Don't have an account? Create one</a>
+
     @if (!string.IsNullOrEmpty(Model.Message))
     {
         <div class="message">@Model.Message</div>
+        <script>
+            // Show success message with character
+            if (window.character) {
+                const username = '@Model.Username';
+                window.character.showLoginSuccess(username || 'there');
+            }
+        </script>
     }
 </div>
