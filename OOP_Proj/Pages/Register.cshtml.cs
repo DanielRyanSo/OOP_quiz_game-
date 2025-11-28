@@ -22,21 +22,12 @@ namespace OOP_Proj.Pages
         [BindProperty]
         public string Password { get; set; } = "";
 
-        [BindProperty]
-        public string ConfirmPassword { get; set; } = "";
-
         public string Message { get; set; } = "";
 
         public void OnGet() { }
 
         public void OnPost()
         {
-            if (Password != ConfirmPassword)
-            {
-                Message = "Passwords do not match.";
-                return;
-            }
-
             if (_db.Users.Any(u => u.Username == Username))
             {
                 Message = "Username already exists.";
@@ -46,10 +37,14 @@ namespace OOP_Proj.Pages
             using var sha = SHA256.Create();
             var hash = Convert.ToBase64String(sha.ComputeHash(Encoding.UTF8.GetBytes(Password)));
 
-            _db.Users.Add(new User { Username = Username, PasswordHash = hash });
+            _db.Users.Add(new User
+            {
+                Username = Username,
+                PasswordHash = hash
+            });
             _db.SaveChanges();
 
-            Response.Redirect("/Login");
+            Message = "Registration successful! You can now login.";
         }
     }
 }

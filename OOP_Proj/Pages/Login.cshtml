@@ -1,85 +1,12 @@
 @page
 @model OOP_Proj.Pages.LoginModel
-@{
-    ViewData["Title"] = "Login";
-}
+<h2>Login</h2>
 
-<style>
-    body {
-        margin: 0;
-        font-family: 'Segoe UI', sans-serif;
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-    }
+<form method="post">
+    <input asp-for="Username" placeholder="Username" required /><br />
+    <input asp-for="Password" type="password" placeholder="Password" required /><br />
+    <button type="submit">Login</button>
+</form>
 
-    .container {
-        background: #fff;
-        padding: 50px;
-        border-radius: 20px;
-        box-shadow: 0 20px 60px rgba(0,0,0,0.2);
-        width: 350px;
-        text-align: center;
-    }
-
-    h2 {
-        color: #667eea;
-        margin-bottom: 30px;
-    }
-
-    input[type="text"], input[type="password"] {
-        width: 100%;
-        padding: 15px;
-        margin: 10px 0;
-        border-radius: 10px;
-        border: 1px solid #ccc;
-        box-sizing: border-box;
-    }
-
-    button {
-        width: 100%;
-        padding: 15px;
-        margin-top: 20px;
-        border-radius: 10px;
-        border: none;
-        background: #667eea;
-        color: #fff;
-        font-weight: bold;
-        cursor: pointer;
-        transition: background 0.3s ease;
-    }
-
-    button:hover {
-        background: #764ba2;
-    }
-
-    .register-link {
-        margin-top: 15px;
-        display: block;
-        color: #764ba2;
-        cursor: pointer;
-        text-decoration: underline;
-    }
-
-    .message {
-        color: red;
-        margin-top: 10px;
-        font-weight: bold;
-    }
-</style>
-
-<div class="container">
-    <h2>Login</h2>
-    <form method="post">
-        <input asp-for="Username" placeholder="Username" />
-        <input asp-for="Password" type="password" placeholder="Password" />
-        <button type="submit">Login</button>
-    </form>
-    <a asp-page="/Register" class="register-link">Don't have an account? Register</a>
-    @if (!string.IsNullOrEmpty(Model.Message))
-    {
-        <div class="message">@Model.Message</div>
-    }
-</div>
+<p>@Model.Message</p>
+<a href="/Register">Register</a>
