@@ -456,6 +456,7 @@
                 <input type="hidden" name="Number1" value="@Model.Number1" />
                 <input type="hidden" name="Number2" value="@Model.Number2" />
                 <input type="hidden" name="TimeUp" id="timeUpField" value="false" />
+                <input type="hidden" name="TimeRemaining" id="timeRemainingField" value="@Model.TimeLimitSeconds" />
                 @for (int i = 0; i < Model.Choices.Count; i++)
                 {
                     <input type="hidden" name="Choices[@i]" value="@Model.Choices[i]" />
@@ -516,7 +517,7 @@
 
         <div style="margin-top: 30px;">
             <div class="score-display">
-                🏆 Score: @Model.Score / 10
+                🏆 Score: @Model.Score
             </div>
             <div>
                 <a asp-page="/Index" class="exit-btn">Exit</a>
@@ -531,7 +532,7 @@
                 Game Complete!
             </h1>
             <div class="final-score">
-                Final Score: @Model.Score / 10
+                Final Score: @Model.Score
             </div>
             <p class="score-message">
                 @if (Model.Score == 10)
@@ -577,13 +578,22 @@
         (function () {
             var timeLeftSpan = document.getElementById('timeLeft');
             var timeUpField = document.getElementById('timeUpField');
+            var timeRemainingField = document.getElementById('timeRemainingField');
             var form = document.getElementById('quizForm');
 
             var timeRemaining = @Model.TimeLimitSeconds;
+            if (timeRemainingField) {
+                timeRemainingField.value = timeRemaining;
+            }
+
             var interval = setInterval(function () {
                 timeRemaining--;
                 if (timeLeftSpan) {
                     timeLeftSpan.textContent = timeRemaining;
+                }
+
+                if (timeRemainingField) {
+                    timeRemainingField.value = timeRemaining;
                 }
 
                 if (timeRemaining <= 0) {
@@ -591,11 +601,23 @@
                     if (timeUpField) {
                         timeUpField.value = 'true';
                     }
+                    if (timeRemainingField) {
+                        timeRemainingField.value = 0;
+                    }
                     if (form) {
                         form.submit();
                     }
                 }
             }, 1000);
+
+            // Ensure the remaining time is sent when the user submits by clicking an answer
+            if (form) {
+                form.addEventListener('submit', function () {
+                    if (timeRemainingField) {
+                        timeRemainingField.value = timeRemaining;
+                    }
+                });
+            }
         })();
     </script>
 }

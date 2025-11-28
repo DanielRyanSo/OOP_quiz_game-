@@ -32,6 +32,10 @@ namespace OOP_Proj.Pages
         [BindProperty]
         public bool TimeUp { get; set; }
 
+        // Remaining time (sent from client) in seconds
+        [BindProperty]
+        public int TimeRemaining { get; set; }
+
         // Values displayed in the UI
         public int Number1 { get; set; }
         public int Number2 { get; set; }
@@ -74,6 +78,9 @@ namespace OOP_Proj.Pages
 
             Tracker = new ScoreTracker();
             CurrentPlayer = new Player();
+
+            // initialize TimeRemaining to the per-question limit
+            TimeRemaining = TimeLimitSeconds;
 
             GenerateQuestion();
         }
@@ -138,8 +145,27 @@ namespace OOP_Proj.Pages
 
                 if (Math.Abs(userAnswer - correctAnswer) < 0.01)
                 {
-                    _score++;
-                    Feedback = "✅ Correct!";
+                    // Compute base points by difficulty
+                    int basePoints = Difficulty?.ToLower() switch
+                    {
+                        "easy" => 10,
+                        "medium" => 25,
+                        "hard" => 50,
+                        _ => 10
+                    };
+
+                    // Ensure TimeRemaining is within [0, TimeLimitSeconds]
+                    var remaining = TimeRemaining;
+                    if (remaining < 0) remaining = 0;
+                    if (remaining > TimeLimitSeconds) remaining = TimeLimitSeconds;
+
+                    // Bonus up to 50% of base points, scaled by remaining time fraction
+                    int bonus = (int)Math.Ceiling(((double)remaining / TimeLimitSeconds) * (basePoints * 0.5));
+                    int pointsAwarded = basePoints + bonus;
+
+                    _score += pointsAwarded;
+
+                    Feedback = $"✅ Correct! +{pointsAwarded} points ({basePoints} + {bonus} bonus)";
                     IsCorrectAnswer = true;
                     Tracker.RegisterAnswer(true);
                 }
@@ -237,6 +263,9 @@ namespace OOP_Proj.Pages
             GameOver = false;
             Feedback = null;
             IsCorrectAnswer = false;
+
+            // Reset TimeRemaining for a fresh question
+            TimeRemaining = TimeLimitSeconds;
 
             double correct = Calculate(_num1, _num2, Operation);
             Choices = GenerateChoices(correct);
