@@ -3,11 +3,20 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using GameAuth.Data;
+using GameAuth.Models;
 
 namespace OOP_Proj.Pages
 {
     public class GameModel : PageModel
     {
+        private readonly AppDbContext _db;
+
+        public GameModel(AppDbContext db)
+        {
+            _db = db;
+        }
+
         // Route params from @page "{operation}/{difficulty}"
         [BindProperty(SupportsGet = true)]
         public string Operation { get; set; } = "";
@@ -81,6 +90,8 @@ namespace OOP_Proj.Pages
                     Score = _score;
                     QuestionNumber = 10;
 
+                    SaveHighScore(Score);
+
                     Number1 = _num1;
                     Number2 = _num2;
                     Symbol = OperationToSymbol(Operation);
@@ -113,6 +124,7 @@ namespace OOP_Proj.Pages
                 if (_questionCount >= 10)
                 {
                     GameOver = true;
+                    SaveHighScore(Score);
                 }
 
                 return;
@@ -148,6 +160,7 @@ namespace OOP_Proj.Pages
                 if (_questionCount >= 10)
                 {
                     GameOver = true;
+                    SaveHighScore(Score);
                 }
                 else
                 {
@@ -281,6 +294,35 @@ namespace OOP_Proj.Pages
 
             // Shuffle
             return set.OrderBy(x => _rand.Next()).ToList();
+        }
+        private void SaveHighScore(int score)
+        {
+            try
+            {
+                var username = HttpContext.Session.GetString("Username");
+                if (string.IsNullOrEmpty(username))
+                {
+                    // User not logged in, don't save score
+                    return;
+                }
+
+                var highScore = new HighScore
+                {
+                    Username = username,
+                    Operation = Operation,
+                    Difficulty = Difficulty,
+                    Score = score,
+                    Date = DateTime.UtcNow
+                };
+
+                _db.HighScores.Add(highScore);
+                _db.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                // Log error (you can add logging here)
+                Console.WriteLine($"Error saving high score: {ex.Message}");
+            }
         }
     }
 
