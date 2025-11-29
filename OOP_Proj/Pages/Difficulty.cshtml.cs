@@ -8,6 +8,9 @@ namespace OOP_Proj.Pages
         [BindProperty(SupportsGet = true)]
         public string Operation { get; set; } = string.Empty;
 
+        [BindProperty(SupportsGet = true)]
+        public bool FastMode { get; set; }
+
         public void OnGet()
         {
         }

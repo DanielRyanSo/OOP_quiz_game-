@@ -376,6 +376,15 @@
         transform: translateY(-8px);
         transition: opacity 0.35s ease, transform 0.35s ease;
     }
+    .fast-mode-badge {
+        color: #ff4757;
+        font-weight: bold;
+        margin-left: 10px;
+    }
+    .timer-info.fast {
+        color: #ff4757;
+        font-weight: bold;
+    }
 </style>
 
 <div id="pageOverlay" class="page-overlay" aria-hidden="true"></div>
@@ -395,6 +404,10 @@
                 <span style="text-transform: capitalize;">@Model.Difficulty</span>
                 <span>•</span>
                 <span style="text-transform: capitalize;">@Model.Operation</span>
+                @if (Model.FastMode)
+                {
+                    <div class="game-info fast-mode-badge">⚡ Fast Mode</div>
+                }
             </div>
             <div class="game-info">
                 Question @Model.QuestionNumber / 10

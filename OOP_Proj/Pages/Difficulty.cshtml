@@ -234,7 +234,7 @@
     </div>
 
     <div class="difficulty-grid">
-        <a asp-page="/Game" asp-route-operation="@Model.Operation" asp-route-difficulty="easy" class="diff-btn diff-easy" data-transition="true">
+        <a asp-page="/Game" asp-route-operation="@Model.Operation" asp-route-difficulty="easy" asp-route-FastMode="@Model.FastMode" class="diff-btn diff-easy" data-transition="true">
             <span>
                 <span class="difficulty-icon">😊</span>
                 <span class="difficulty-text">Easy</span>
@@ -242,7 +242,7 @@
             </span>
         </a>
 
-        <a asp-page="/Game" asp-route-operation="@Model.Operation" asp-route-difficulty="medium" class="diff-btn diff-medium" data-transition="true">
+        <a asp-page="/Game" asp-route-operation="@Model.Operation" asp-route-difficulty="medium" asp-route-FastMode="@Model.FastMode" class="diff-btn diff-medium" data-transition="true">
             <span>
                 <span class="difficulty-icon">🤔</span>
                 <span class="difficulty-text">Medium</span>
@@ -250,7 +250,7 @@
             </span>
         </a>
 
-        <a asp-page="/Game" asp-route-operation="@Model.Operation" asp-route-difficulty="hard" class="diff-btn diff-hard" data-transition="true">
+        <a asp-page="/Game" asp-route-operation="@Model.Operation" asp-route-difficulty="hard" asp-route-FastMode="@Model.FastMode" class="diff-btn diff-hard" data-transition="true">
             <span>
                 <span class="difficulty-icon">🔥</span>
                 <span class="difficulty-text">Hard</span>
