@@ -20,123 +20,220 @@
         align-items: center;
         justify-content: center;
         overflow: hidden;
-        padding: 40px 20px;
+        position: relative;
+    }
+
+    @@keyframes slideIn {
+        from {
+            transform: translateY(-50px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
     }
 
     .leaderboard-container {
         background: white;
-        border-radius: 25px;
-        padding: 40px 50px;
-        box-shadow: 0 15px 45px rgba(0, 0, 0, 0.35);
+        border-radius: 30px;
+        padding: 50px 60px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
         text-align: center;
+        max-width: 700px;
         width: 100%;
-        max-width: 900px;
-        animation: fadeIn 0.5s ease-out;
-        border: 1px solid rgba(255,255,255,0.4);
+        position: relative;
+        z-index: 1;
+        animation: slideIn 0.6s ease-out;
+        border: 1px solid rgba(255, 255, 255, 0.5);
     }
 
-    @@keyframes fadeIn {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-
-    h2 {
+    .page-title {
         color: #64b5f6;
-        font-size: 38px;
-        margin-bottom: 20px;
-        font-weight: 800;
-        letter-spacing: 1px;
+        font-size: 36px;
+        margin-bottom: 10px;
+        font-weight: bold;
     }
 
-    .subtitle {
-        color: #555;
+    .leaderboard-container .subtitle {
+        color: #666;
         font-size: 16px;
-        margin-bottom: 30px;
+        margin-bottom: 20px;
     }
 
-    table {
+    .leaderboard-container table {
         width: 100%;
         border-collapse: separate;
-        border-spacing: 0 12px;
+        border-spacing: 0 10px;
         margin-top: 10px;
+        border-radius: 12px;
+        overflow: hidden;
+        text-align: center;
+        background: transparent;
     }
 
-    thead th {
+    .leaderboard-container thead th {
+        font-size: 14px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
         background: #1976d2;
-        color: white;
-        padding: 14px;
-        border-radius: 10px;
-        font-size: 15px;
-        font-weight: 600;
-        letter-spacing: 0.5px;
+        color: #fff;
+        padding: 12px;
     }
 
-    tbody tr {
-        transition: 0.25s ease;
-    }
-
-    tbody td {
-        background: rgba(100, 181, 246, 0.12);
-        padding: 14px 12px;
-        border-radius: 10px;
+    .leaderboard-container tbody td {
+        padding: 12px;
         font-size: 15px;
-        font-weight: 500;
+        font-weight: bold;
         color: #222;
+        background: rgba(100, 181, 246, 0.06);
+        border-bottom: 1px solid rgba(0,0,0,0.06);
     }
 
-    tbody tr:hover td {
-        background: rgba(100, 181, 246, 0.22);
-        transform: scale(1.01);
+    .leaderboard-container tbody tr:hover {
+        transform: scale(1.02);
+        background: rgba(100, 181, 246, 0.12);
     }
 
-    .back-button {
+    .rank-cell {
+        text-align: center;
+    }
+
+    .medal-icon, .rank-number {
         display: inline-block;
-        margin-top: 35px;
+        width: 32px;
+        text-align: center;
+        font-size: 18px;
+        font-weight: 700;
+    }
+
+    /* Top 3 row styles */
+    tr.gold {
+        background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+        color: #000;
+        border: 2px solid #FFD700;
+    }
+
+    tr.silver {
+        background: linear-gradient(135deg, #C0C0C0 0%, #808080 100%);
+        color: #000;
+        border: 2px solid #C0C0C0;
+    }
+
+    tr.bronze {
+        background: linear-gradient(135deg, #CD7F32 0%, #8B4513 100%);
+        color: #fff;
+        border: 2px solid #CD7F32;
+    }
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: #64b5f6;
+        text-decoration: none;
+        font-weight: 600;
+        padding: 12px 24px;
+        border-radius: 25px;
+        background: rgba(100, 181, 246, 0.15);
+        transition: all 0.3s ease;
+        margin-top: 20px;
+        border: 1px solid rgba(100, 181, 246, 0.3);
+    }
+
+    .back-link:hover {
         background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
         color: white;
-        padding: 14px 40px;
-        border-radius: 40px;
-        text-decoration: none;
-        font-size: 18px;
-        font-weight: bold;
-        box-shadow: 0 8px 25px rgba(25, 118, 210, 0.45);
-        transition: 0.3s ease;
-        border: 1px solid rgba(255,255,255,0.3);
+        transform: translateX(-5px);
     }
 
-    .back-button:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 12px 30px rgba(100, 181, 246, 0.7);
+    .fast-mode-icon {
+        margin-left: 6px;
+        color: #ffb86b;
+        font-weight: bold;
+    }
+
+    @@media (max-width: 768px) {
+        .leaderboard-container {
+            padding: 30px 24px;
+            margin: 20px;
+        }
+
+        .page-title {
+            font-size: 28px;
+        }
+
+        .leaderboard-container thead th, .leaderboard-container tbody td {
+            font-size: 14px;
+            padding: 10px;
+        }
     }
 </style>
 
 <div class="leaderboard-container">
-    <h2>🏆 High Scores</h2>
+    <h1 class="page-title">🏆 High Scores</h1>
     <p class="subtitle">View the top players and their latest achievements.</p>
 
     <table>
         <thead>
             <tr>
+                <th>Rank</th>
                 <th>Username</th>
                 <th>Operation</th>
                 <th>Difficulty</th>
                 <th>Score</th>
-                <th>Date</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var score in Model.Scores)
+            @{
+                var rank = 1;
+            }
+            @foreach (var score in Model.Scores.OrderByDescending(s => s.Score))
             {
-                <tr>
+                string rowClass = "";
+                if (rank == 1) rowClass = "gold";
+                else if (rank == 2) rowClass = "silver";
+                else if (rank == 3) rowClass = "bronze";
+
+                <tr class="@rowClass">
+                    <td class="rank-cell">
+                        @if (rank == 1)
+                        {
+                            <span class="medal-icon">🥇</span>
+                        }
+                        else if (rank == 2)
+                        {
+                            <span class="medal-icon">🥈</span>
+                        }
+                        else if (rank == 3)
+                        {
+                            <span class="medal-icon">🥉</span>
+                        }
+                        else
+                        {
+                            <span class="rank-number">@rank</span>
+                        }
+                    </td>
                     <td>@score.Username</td>
-                    <td>@score.Operation</td>
-                    <td>@score.Difficulty</td>
+                    <td style="text-transform: capitalize;">@score.Operation</td>
+                    <td>
+                        @if (score.FastMode)
+                        {
+                            <span class="fast-mode">
+                                ⚡ @score.Difficulty ⚡
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="difficulty">@score.Difficulty</span>
+                        }
+                    </td>
                     <td>@score.Score</td>
-                    <td>@score.Date.ToString("yyyy-MM-dd HH:mm")</td>
                 </tr>
+                rank++;
             }
         </tbody>
     </table>
-
-    <a asp-page="/Index" class="back-button">⬅ Back to Main</a>
+    <a asp-page="/Index" class="back-link">⬅ Back to Home</a>
 </div>

@@ -352,6 +352,7 @@ namespace OOP_Proj.Pages
                     Operation = Operation,
                     Difficulty = Difficulty,
                     Score = score,
+                    FastMode = FastMode,
                     Date = DateTime.UtcNow
                 };
 
