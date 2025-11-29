@@ -6,6 +6,8 @@ namespace GameAuth.Data
     public class AppDbContext : DbContext
     {
         public DbSet<User> Users => Set<User>();
+        public DbSet<HighScore> HighScores => Set<HighScore>();
+
 
         // Parameterless constructor (optional, can leave if migrations need it)
         public AppDbContext() { }
