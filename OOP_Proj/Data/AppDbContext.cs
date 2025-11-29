@@ -7,7 +7,8 @@ namespace GameAuth.Data
     {
         public DbSet<User> Users => Set<User>();
         public DbSet<HighScore> HighScores => Set<HighScore>();
-
+        public DbSet<DailyProblem> DailyProblems { get; set; }
+        public DbSet<DailyCompletion> DailyCompletions { get; set; }
 
         // Parameterless constructor (optional, can leave if migrations need it)
         public AppDbContext() { }

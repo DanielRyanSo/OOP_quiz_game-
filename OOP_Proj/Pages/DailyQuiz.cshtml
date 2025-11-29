@@ -1,0 +1,187 @@
+﻿@page
+@model OOP_Proj.Pages.DailyQuizModel
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .quiz-container {
+        background: white;
+        border-radius: 20px;
+        padding: 35px 45px;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        max-width: 700px;
+        width: 100%;
+        animation: fadeIn 0.6s ease-out;
+    }
+
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-15px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    h2 {
+        color: #667eea;
+        font-size: 30px;
+        margin-bottom: 20px;
+        font-weight: bold;
+    }
+
+    .question-text {
+        font-size: 48px;
+        color: #667eea;
+        font-weight: bold;
+        margin: 30px 0;
+        text-align: center;
+        letter-spacing: 8px;
+        animation: questionPop 0.5s ease;
+    }
+
+    @@keyframes questionPop {
+        0% {
+            transform: scale(0.9);
+            opacity: 0;
+        }
+
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    .instruction {
+        display: inline-block;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        font-size: 20px;
+        font-weight: 700;
+        padding: 8px 18px;
+        border-radius: 25px;
+        margin-bottom: 20px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        animation: fadeInBadge 0.6s ease-out;
+    }
+
+
+    @@keyframes fadeInBadge {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .equation {
+        font-size: 48px;
+        color: #667eea;
+        font-weight: bold;
+        letter-spacing: 8px;
+        animation: questionPop 0.5s ease;
+    }
+
+    input[type="text"] {
+        padding: 12px;
+        width: 80%;
+        border: 2px solid #667eea;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        font-size: 16px;
+    }
+
+    button {
+        padding: 12px 24px;
+        background: #667eea;
+        color: white;
+        border: none;
+        border-radius: 25px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+        button:hover {
+            background: #764ba2;
+            transform: translateY(-3px);
+        }
+
+    .back-button {
+        display: inline-block;
+        margin-top: 25px;
+        padding: 12px 24px;
+        background: #667eea;
+        color: white;
+        text-decoration: none;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+        .back-button:hover {
+            background: #764ba2;
+            transform: translateY(-3px);
+        }
+</style>
+
+<div class="quiz-container">
+    @if (Model.AlreadyCompleted)
+    {
+        <h2>✅ Daily Challenge Completed!</h2>
+        <p>Come back tomorrow for a new problem.</p>
+        <a asp-page="/Index" class="back-button">⬅ Back to Main Menu</a>
+    }
+    else if (Model.Problem == null || string.IsNullOrEmpty(Model.Problem.Answer))
+    {
+        <h2>📭 No Daily Problem Available</h2>
+        <p>Please check back tomorrow.</p>
+        <a asp-page="/Index" class="back-button">⬅ Back to Main Menu</a>
+    }
+    else
+    {
+        <h2>🧮 Daily Algebra Challenge</h2>
+        <div class="question-text">
+            <div class="instruction">Solve for x</div>
+            <div class="equation">@Model.Problem.QuestionText</div>
+        </div>
+
+        <form method="post" asp-page-handler="Submit">
+            <input type="text" name="answer" placeholder="Your answer" />
+            <button type="submit">Submit</button>
+        </form>
+
+        <a asp-page="/Index" class="back-button">⬅ Back to Main Menu</a>
+    }
+</div>

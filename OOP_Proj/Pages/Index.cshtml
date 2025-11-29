@@ -321,9 +321,13 @@
                 <div class="feature-text">High Score</div>
             </div>
         </a>
-        <div class="feature">
-            <div class="feature-icon">🧠</div>
-            <div class="feature-text">Brain Boost</div>
-        </div>
+        <a asp-page="/DailyQuiz" class="feature-link">
+            <div class="feature">
+                <div class="feature-icon">
+                    @(Model.DailyCompleted ? "✔️" : "🧠")
+                </div>
+                <div class="feature-text">Brain Boost</div>
+            </div>
+        </a>
     </div>
 </div>

@@ -85,6 +85,11 @@
         font-weight: bold;
     }
 
+    .medal {
+        font-size: 18px;
+        margin-left: 6px;
+    }
+
     .back-button {
         display: inline-block;
         margin-top: 25px;
@@ -109,6 +114,7 @@
     <table>
         <thead>
             <tr>
+                <th>Rank</th>
                 <th>Username</th>
                 <th>Operation</th>
                 <th>Difficulty</th>
@@ -116,9 +122,27 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var score in Model.Scores)
+            @{
+                var rank = 1;
+            }
+            @foreach (var score in Model.Scores.OrderByDescending(s => s.Score))
             {
                 <tr>
+                    <td>
+                        @rank
+                        @if (rank == 1)
+                        {
+                            <span class="medal">🥇</span>
+                        }
+                        else if (rank == 2)
+                        {
+                            <span class="medal">🥈</span>
+                        }
+                        else if (rank == 3)
+                        {
+                            <span class="medal">🥉</span>
+                        }
+                    </td>
                     <td>@score.Username</td>
                     <td>@score.Operation</td>
                     <td>
@@ -130,6 +154,7 @@
                     </td>
                     <td>@score.Score</td>
                 </tr>
+                rank++;
             }
         </tbody>
     </table>
