@@ -13,7 +13,8 @@
 
     body {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #0f3460 0%, #16213e 25%, #1a3a52 50%, #0d1f2d 75%, #050a0f 100%);
+        background-attachment: fixed;
         min-height: 100vh;
         display: flex;
         align-items: center;
@@ -22,48 +23,7 @@
         position: relative;
     }
 
-    /* Floating math symbols animation */
-    .floating-symbols {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-        z-index: 0;
-    }
 
-    .symbol {
-        position: absolute;
-        font-size: 40px;
-        color: rgba(255, 255, 255, 0.1);
-        animation: float 15s infinite;
-        font-weight: bold;
-    }
-
-    .symbol:nth-child(1) { left: 10%; animation-delay: 0s; }
-    .symbol:nth-child(2) { left: 20%; animation-delay: 2s; }
-    .symbol:nth-child(3) { left: 30%; animation-delay: 4s; }
-    .symbol:nth-child(4) { left: 40%; animation-delay: 1s; }
-    .symbol:nth-child(5) { left: 50%; animation-delay: 3s; }
-    .symbol:nth-child(6) { left: 60%; animation-delay: 5s; }
-    .symbol:nth-child(7) { left: 70%; animation-delay: 2.5s; }
-    .symbol:nth-child(8) { left: 80%; animation-delay: 4.5s; }
-
-    @@keyframes float {
-        0% {
-            transform: translateY(100vh) rotate(0deg);
-            opacity: 0;
-        }
-        10% {
-            opacity: 1;
-        }
-        90% {
-            opacity: 1;
-        }
-        100% {
-            transform: translateY(-100px) rotate(360deg);
-            opacity: 0;
-        }
-    }
 
     .game-container {
         background: white;
@@ -72,10 +32,11 @@
         box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
         text-align: center;
         max-width: 700px;
-        width: 90%;
+        width: 100%;
         position: relative;
         z-index: 1;
         animation: slideIn 0.6s ease-out;
+        border: 1px solid rgba(255, 255, 255, 0.5);
     }
 
     @@keyframes slideIn {
@@ -102,7 +63,7 @@
         display: inline-flex;
         align-items: center;
         gap: 10px;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
         color: white;
         padding: 10px 20px;
         border-radius: 25px;
@@ -118,7 +79,7 @@
     .progress-bar {
         width: 100%;
         height: 10px;
-        background: #e0e7ff;
+        background: rgba(100, 181, 246, 0.2);
         border-radius: 10px;
         overflow: hidden;
         margin-bottom: 20px;
@@ -126,14 +87,14 @@
 
     .progress-fill {
         height: 100%;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
         transition: width 0.5s ease;
         border-radius: 10px;
     }
 
     .question-display {
         font-size: 48px;
-        color: #667eea;
+        color: #64b5f6;
         font-weight: bold;
         margin: 30px 0;
         letter-spacing: 8px;
@@ -169,6 +130,26 @@
         cursor: pointer;
         transition: all 0.3s ease;
         box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .choice-btn:before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(102, 126, 234, 0.1);
+        transform: translate(-50%, -50%);
+        transition: width 0.5s, height 0.5s;
+    }
+
+    .choice-btn:hover:before {
+        width: 300px;
+        height: 300px;
     }
 
     .choice-btn:hover {
@@ -222,28 +203,29 @@
         padding: 15px 40px;
         border: none;
         border-radius: 25px;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
         color: white;
         font-weight: bold;
         font-size: 18px;
         cursor: pointer;
         transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        box-shadow: 0 4px 15px rgba(100, 181, 246, 0.4);
     }
 
     .next-btn:hover {
         transform: translateY(-3px);
-        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        box-shadow: 0 6px 20px rgba(100, 181, 246, 0.6);
     }
 
     .score-display {
         font-size: 20px;
-        color: #667eea;
+        color: #64b5f6;
         font-weight: bold;
-        background: #f6f8ff;
+        background: rgba(100, 181, 246, 0.15);
         padding: 12px 25px;
         border-radius: 25px;
         display: inline-block;
+        border: 1px solid rgba(100, 181, 246, 0.3);
     }
 
     .exit-btn {
@@ -286,7 +268,7 @@
 
     .final-score {
         font-size: 36px;
-        color: #667eea;
+        color: #64b5f6;
         font-weight: bold;
         margin-bottom: 20px;
     }
@@ -330,47 +312,15 @@
     }
 
     .btn-menu {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
         color: white;
-        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        box-shadow: 0 4px 15px rgba(100, 181, 246, 0.4);
     }
 
     .btn-menu:hover {
         transform: translateY(-3px);
-        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        box-shadow: 0 6px 20px rgba(100, 181, 246, 0.6);
     }
-
- /* Clean, bigger floating cat popup */
-.cat-popup {
-    position: fixed;
-    right: 20px;
-    bottom: 20px;
-    z-index: 999;
-    animation: slideIn 0.3s ease-out;
-
-    /* Remove background box */
-    background: none;
-    border: none;
-    padding: 0;
-    box-shadow: none;
-
-    /* Make it big */
-    width: 260px; /* adjust if you want bigger */
-}
-
-.cat-popup img {
-    width: 100%;
-    height: auto;
-    border-radius: 20px; /* optional */
-}
-
-.cat-popup p {
-    text-align: center;
-    margin-top: 8px;
-    font-size: 20px;
-    font-weight: bold;
-    color: black; 
-}
 
     @@keyframes slideIn {
         from { transform: translateX(120%); opacity: 0; }
@@ -404,22 +354,42 @@
             font-size: 28px;
         }
     }
+
+    /* Transition overlay to mask page reloads during question navigation */
+    .page-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.35s ease;
+        background: linear-gradient(135deg, #0f3460 0%, #16213e 25%, #1a3a52 50%, #0d1f2d 75%, #050a0f 100%);
+    }
+
+    .page-overlay.active {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .game-container.fade-out {
+        opacity: 0;
+        transform: translateY(-8px);
+        transition: opacity 0.35s ease, transform 0.35s ease;
+    }
 </style>
 
-<div class="floating-symbols">
-    <div class="symbol">+</div>
-    <div class="symbol">−</div>
-    <div class="symbol">×</div>
-    <div class="symbol">÷</div>
-    <div class="symbol">=</div>
-    <div class="symbol">∑</div>
-    <div class="symbol">π</div>
-    <div class="symbol">∞</div>
-</div>
+<div id="pageOverlay" class="page-overlay" aria-hidden="true"></div>
 
 <div class="game-container">
     @if (!Model.GameOver)
     {
+        <script>
+            // Show character message when game starts
+            if (window.character && @Model.QuestionNumber === 1) {
+                window.character.showGameStart();
+            }
+        </script>
+
         <div class="game-header">
             <div class="game-info">
                 <span style="text-transform: capitalize;">@Model.Difficulty</span>
@@ -482,19 +452,19 @@
                     @Model.Feedback
                 </div>
 
-                <!-- Cat meme popup -->
-           <div class="cat-popup">
-    <img src="@(Model.IsCorrectAnswer 
-        ? "https://media.tenor.com/43RlWoIw0u8AAAAj/cat.gif"
-        : "https://media.tenor.com/CfAOsEQu5IIAAAAj/3d-cat.gif")"
-        alt="Cat reaction GIF" />
-
-    <p>
-        @(Model.IsCorrectAnswer 
-            ? "Purr-fect! Great job! 🐾" 
-            : "Oops! You'll get it next time! 🐾")
-    </p>
-</div>
+                <script>
+                    // Show character feedback
+                    if (window.character) {
+                        @if (Model.IsCorrectAnswer)
+                        {
+                            <text>window.character.showCorrectAnswer();</text>
+                        }
+                        else
+                        {
+                            <text>window.character.showWrongAnswer();</text>
+                        }
+                    }
+                </script>
 
                 <form method="post">
                     <!-- Hidden fields to preserve game state -->
@@ -567,6 +537,13 @@
                     <span>Back to Menu</span>
                 </a>
             </div>
+
+            <script>
+                // Show character message for game completion
+                if (window.character) {
+                    window.character.showGameComplete(@Model.Score);
+                }
+            </script>
         </div>
     }
 </div>
@@ -578,12 +555,19 @@
             var timeLeftSpan = document.getElementById('timeLeft');
             var timeUpField = document.getElementById('timeUpField');
             var form = document.getElementById('quizForm');
+            var warningShown = false;
 
             var timeRemaining = @Model.TimeLimitSeconds;
             var interval = setInterval(function () {
                 timeRemaining--;
                 if (timeLeftSpan) {
                     timeLeftSpan.textContent = timeRemaining;
+                }
+
+                // Show warning at 5 seconds
+                if (timeRemaining === 5 && !warningShown && window.character) {
+                    window.character.showTimeWarning(5);
+                    warningShown = true;
                 }
 
                 if (timeRemaining <= 0) {
