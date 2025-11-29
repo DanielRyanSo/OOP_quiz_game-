@@ -256,25 +256,25 @@
     <p class="subtitle">Pick the math challenge you want to master!</p>
 
     <div class="operations-grid">
-        <a asp-page="/Difficulty" asp-route-operation="add" class="operation-btn">
+        <a asp-page="/Difficulty" asp-route-operation="add" asp-route-FastMode="@Model.FastMode" class="operation-btn">
             <span>
                 <span class="operation-icon">➕</span>
                 <span class="operation-text">Addition</span>
             </span>
         </a>
-        <a asp-page="/Difficulty" asp-route-operation="subtract" class="operation-btn">
+        <a asp-page="/Difficulty" asp-route-operation="subtract" asp-route-FastMode="@Model.FastMode" class="operation-btn">
             <span>
                 <span class="operation-icon">➖</span>
                 <span class="operation-text">Subtraction</span>
             </span>
         </a>
-        <a asp-page="/Difficulty" asp-route-operation="multiply" class="operation-btn">
+        <a asp-page="/Difficulty" asp-route-operation="multiply" asp-route-FastMode="@Model.FastMode" class="operation-btn">
             <span>
                 <span class="operation-icon">✖️</span>
                 <span class="operation-text">Multiplication</span>
             </span>
         </a>
-        <a asp-page="/Difficulty" asp-route-operation="divide" class="operation-btn">
+        <a asp-page="/Difficulty" asp-route-operation="divide" asp-route-FastMode="@Model.FastMode" class="operation-btn">
             <span>
                 <span class="operation-icon">➗</span>
                 <span class="operation-text">Division</span>

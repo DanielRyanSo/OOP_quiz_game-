@@ -36,6 +36,10 @@ namespace OOP_Proj.Pages
         [BindProperty]
         public int TimeRemaining { get; set; }
 
+        //Fast mode toggle
+        [BindProperty(SupportsGet = true)]
+        public bool FastMode { get; set; } = false;
+
         // Values displayed in the UI
         public int Number1 { get; set; }
         public int Number2 { get; set; }
@@ -53,7 +57,7 @@ namespace OOP_Proj.Pages
         public bool IsCorrectAnswer { get; set; }
 
         // Timer setting (seconds per question) – works with Game.cshtml JS
-        public int TimeLimitSeconds { get; } = 10;
+        public int TimeLimitSeconds => FastMode ? 5 : 10;
 
         // Extra classes for OOP (can be mentioned in your diagram/defense)
         public Player CurrentPlayer { get; private set; } = new Player();
@@ -161,11 +165,18 @@ namespace OOP_Proj.Pages
 
                     // Bonus up to 50% of base points, scaled by remaining time fraction
                     int bonus = (int)Math.Ceiling(((double)remaining / TimeLimitSeconds) * (basePoints * 0.5));
+
+                    if (FastMode)
+                    {
+                        // In Fast Mode, double the bonus points
+                        bonus *= 2;
+                    }
+
                     int pointsAwarded = basePoints + bonus;
 
                     _score += pointsAwarded;
 
-                    Feedback = $"✅ Correct! +{pointsAwarded} points ({basePoints} + {bonus} bonus)";
+                    Feedback = $"✅ Correct! +{pointsAwarded} points";
                     IsCorrectAnswer = true;
                     Tracker.RegisterAnswer(true);
                 }

@@ -404,6 +404,18 @@
             font-size: 28px;
         }
     }
+
+    .fast-mode-badge {
+        color: #ff4757;
+        font-weight: bold;
+        margin-left: 10px;
+    }
+
+    .timer-info.fast {
+        color: #ff4757;
+        font-weight: bold;
+    }
+
 </style>
 
 <div class="floating-symbols">
@@ -425,6 +437,11 @@
                 <span style="text-transform: capitalize;">@Model.Difficulty</span>
                 <span>•</span>
                 <span style="text-transform: capitalize;">@Model.Operation</span>
+
+                @if (Model.FastMode)
+                {
+                <div class="game-info fast-mode-badge">⚡ Fast Mode</div>
+                }
             </div>
             <div class="game-info">
                 Question @Model.QuestionNumber / 10
