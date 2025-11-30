@@ -57,6 +57,18 @@
         gap: 15px;
     }
 
+    .timer-info {
+        flex: 1 1 100%;
+        text-align: center;
+        margin-top: 10px;
+        margin-bottom: 30px;
+    }
+
+    .timer-info.fast {
+        color: #ff4757;
+        font-weight: bold;
+    }
+
     .game-info {
         display: inline-flex;
         align-items: center;
@@ -244,7 +256,6 @@
         box-shadow: 0 6px 16px rgba(248, 113, 113, 0.6);
     }
 
-    /* Game Over Styles */
     .game-over-container {
         text-align: center;
     }
@@ -282,18 +293,18 @@
         flex-direction: row;
         justify-content: center;
         align-items: center;
-        gap: 15px;               /* smaller spacing */
-        flex-wrap: nowrap;       /* PREVENT wrapping → forces 1 line */
+        gap: 15px;
+        flex-wrap: nowrap
         margin-top: 20px;
     }
 
     .game-over-btn {
-        padding: 12px 25px;      /* slightly smaller */
+        padding: 12px 25px;
         border-radius: 20px;
         text-decoration: none;
         font-weight: bold;
         font-size: 18px;
-        min-width: 140px;        /* reduced from 180–220 */
+        min-width: 140px;
         text-align: center;
         transition: all 0.3s ease;
     }
@@ -353,7 +364,6 @@
         }
     }
 
-    /* Transition overlay to mask page reloads during question navigation */
     .page-overlay {
         position: fixed;
         inset: 0;
@@ -374,16 +384,21 @@
         transform: translateY(-8px);
         transition: opacity 0.35s ease, transform 0.35s ease;
     }
-    .fast-mode-badge {
-        color: #ff4757;
-        font-weight: bold;
-        margin-left: 10px;
-    }
-    .timer-info.fast {
-        color: #ff4757;
-        font-weight: bold;
-    }
 </style>
+
+@if (Model.FastMode)
+{
+    <style>
+        body {
+            background: linear-gradient(135deg, #6b4b00 0%, #8a6a00 50%, #3f2c00 100%) !important;
+            background-attachment: fixed;
+        }
+
+        .page-overlay {
+            background: linear-gradient(135deg, #6b4b00 0%, #8a6a00 50%, #3f2c00 100%) !important;
+        }
+    </style>
+}
 
 <div id="pageOverlay" class="page-overlay" aria-hidden="true"></div>
 
@@ -404,21 +419,23 @@
                 <span style="text-transform: capitalize;">@Model.Operation</span>
                 @if (Model.FastMode)
                 {
-                    <div class="game-info fast-mode-badge">⚡ Fast Mode</div>
+                    <span>•</span>
+                    <span style="text-transform: capitalize; color: #ff4757;">⚡ Fast Mode</span>
                 }
             </div>
-            <div class="game-info">
+            <div class="game-info" style="margin-left:@(Model.FastMode ? "auto" : "130px")">
                 Question @Model.QuestionNumber / 10
             </div>
-            @* Timer only while answering *@
-            @if (Model.Feedback == null)
-            {
-                <div class="game-info timer-info">
-                    ⏱ Time left:
-                    <span id="timeLeft">@Model.TimeLimitSeconds</span>s
-                </div>
-            }
         </div>
+
+        @* Timer only while answering *@
+        @if (Model.Feedback == null)
+        {
+            <div class="game-info timer-info">
+                ⏱ Time left:
+                <span id="timeLeft">@Model.TimeLimitSeconds</span>s
+            </div>
+        }
 
         <div class="progress-bar">
             <div class="progress-fill" style="width: @((Model.QuestionNumber - 1) * 10)%"></div>
@@ -568,26 +585,33 @@
             var timeUpField = document.getElementById('timeUpField');
             var timeRemainingField = document.getElementById('timeRemainingField');
             var form = document.getElementById('quizForm');
-            var warningShown = false;
 
             var timeRemaining = @Model.TimeLimitSeconds;
             if (timeRemainingField) {
                 timeRemainingField.value = timeRemaining;
             }
 
+            if (timeLeftSpan) {
+                if (timeRemaining <= 5) {
+                    timeLeftSpan.parentElement.classList.add("fast");
+                } else {
+                    timeLeftSpan.parentElement.classList.remove("fast");
+                }
+            }
+
             var interval = setInterval(function () {
                 timeRemaining--;
                 if (timeLeftSpan) {
                     timeLeftSpan.textContent = timeRemaining;
+                    if (timeRemaining <= 5) {
+                        timeLeftSpan.parentElement.classList.add("fast");
+                    } else {
+                    timeLeftSpan.parentElement.classList.remove("fast");
+                    }
+
                 }
                    if (timeRemainingField) {
                     timeRemainingField.value = timeRemaining;
-                }
-
-                // Show warning at 5 seconds
-                if (timeRemaining === 5 && !warningShown && window.character) {
-                    window.character.showTimeWarning(5);
-                    warningShown = true;
                 }
 
                 if (timeRemaining <= 0) {
@@ -604,7 +628,6 @@
                 }
             }, 1000);
 
-            // Ensure the remaining time is sent when the user submits by clicking an answer
             if (form) {
                 form.addEventListener('submit', function () {
                     if (timeRemainingField) {
