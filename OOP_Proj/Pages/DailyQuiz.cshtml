@@ -1,0 +1,246 @@
+﻿@page
+@model OOP_Proj.Pages.DailyQuizModel
+@{
+    ViewData["Title"] = "Daily Quiz";
+}
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #0f3460 0%, #16213e 25%, #1a3a52 50%, #0d1f2d 75%, #050a0f 100%);
+        background-attachment: fixed;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .game-container {
+        background: white;
+        border-radius: 30px;
+        padding: 50px 60px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        text-align: center;
+        max-width: 700px;
+        width: 100%;
+        position: relative;
+        z-index: 1;
+        animation: slideIn 0.6s ease-out;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+    }
+
+    @@keyframes slideIn {
+        from {
+            transform: translateY(-50px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .game-icon {
+        font-size: 56px;
+        margin-bottom: 12px;
+        animation: bounce 2s infinite;
+    }
+
+    @@keyframes bounce {
+        0%, 100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-12px);
+        }
+    }
+
+    h1 {
+        color: #64b5f6;
+        font-size: 36px;
+        margin-bottom: 6px;
+        font-weight: bold;
+    }
+
+    .subtitle {
+        color: #666;
+        font-size: 14px;
+        margin-bottom: 24px;
+    }
+
+    .instruction-badge {
+        display: inline-block;
+        background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
+        color: white;
+        font-size: 14px;
+        font-weight: 700;
+        padding: 8px 16px;
+        border-radius: 20px;
+        margin-bottom: 18px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        box-shadow: 0 6px 20px rgba(25, 118, 210, 0.18);
+    }
+
+    /* Use the same question 'pop' keyframes as the Game page for consistent feel */
+    .equation {
+        font-size: 42px;
+        color: #64b5f6;
+        font-weight: bold;
+        letter-spacing: 6px;
+        margin: 18px 0 28px;
+        animation: questionPop 0.5s ease;
+    }
+
+    @@keyframes questionPop {
+        0% {
+            transform: scale(0.8);
+            opacity: 0;
+        }
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    input[type="text"] {
+        padding: 12px;
+        width: 70%;
+        border: 2px solid rgba(100, 181, 246, 0.25);
+        border-radius: 10px;
+        margin-bottom: 18px;
+        font-size: 16px;
+    }
+
+    .submit-btn {
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+        padding: 12px 26px;
+        background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
+        color: white;
+        border: none;
+        border-radius: 28px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.25s ease;
+        box-shadow: 0 8px 30px rgba(25, 118, 210, 0.25);
+    }
+
+    .submit-btn:before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+        z-index: 0;
+    }
+
+    .submit-btn:hover:before {
+        width: 300px;
+        height: 300px;
+    }
+
+    .submit-btn:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 38px rgba(25, 118, 210, 0.35);
+    }
+
+    .submit-btn span {
+        position: relative;
+        z-index: 1;
+        display: inline-block;
+    }
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: #64b5f6;
+        text-decoration: none;
+        font-weight: 600;
+        padding: 12px 24px;
+        border-radius: 25px;
+        background: rgba(100, 181, 246, 0.15);
+        transition: all 0.3s ease;
+        margin-top: 20px;
+        border: 1px solid rgba(100, 181, 246, 0.3);
+    }
+
+    .back-link:hover {
+        background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
+        color: white;
+        transform: translateX(-5px);
+    }
+
+    .notice {
+        color: #666;
+        margin-bottom: 12px;
+    }
+
+    @@media (max-width: 768px) {
+        .game-container {
+            padding: 36px 28px;
+            margin: 20px;
+        }
+
+        .equation {
+            font-size: 30px;
+            letter-spacing: 3px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="game-container">
+    <div class="game-icon">🧠</div>
+    @if (Model.AlreadyCompleted)
+    {
+        <h1>✅ Daily Challenge Completed</h1>
+        <p class="subtitle">You've already solved today's problem — come back tomorrow for a new challenge.</p>
+
+        <a asp-page="/Index" class="back-link" data-transition="true">⬅ Back to Main Menu</a>
+    }
+    else if (Model.Problem == null || string.IsNullOrEmpty(Model.Problem.Answer))
+    {
+        <h1>📭 No Daily Problem</h1>
+        <p class="subtitle">No problem is available right now. Please check back tomorrow.</p>
+
+        <a asp-page="/Index" class="back-link" data-transition="true">⬅ Back to Main Menu</a>
+    }
+    else
+    {
+        <h1>Daily Algebra Challenge</h1>
+        <p class="subtitle">Solve the equation below and submit your answer.</p>
+
+        <div>
+            <div class="instruction-badge">Solve for x</div>
+            <div class="equation">@Model.Problem.QuestionText</div>
+        </div>
+
+        <form method="post" asp-page-handler="Submit" data-transition="true">
+            <input type="text" name="answer" placeholder="Your answer" aria-label="Answer" />
+            <div>
+                <button type="submit" class="submit-btn"><span>Submit</span></button>
+            </div>
+        </form>
+
+        <a asp-page="/Index" class="back-link" data-transition="true">⬅ Back to Main Menu</a>
+    }
+</div>

@@ -93,33 +93,33 @@
         border: 1px solid rgba(255, 255, 255, 0.3);
     }
 
-        .play-button:before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
+    .play-button:before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+    }
 
-        .play-button:hover:before {
-            width: 300px;
-            height: 300px;
-        }
+    .play-button:hover:before {
+        width: 300px;
+        height: 300px;
+    }
 
     .play-button:hover {
         transform: translateY(-5px);
         box-shadow: 0 15px 40px rgba(100, 181, 246, 0.8);
     }
 
-        .play-button span {
-            position: relative;
-            z-index: 1;
-        }
+    .play-button span {
+        position: relative;
+        z-index: 1;
+    }
 
     .features {
         display: flex;
@@ -137,9 +137,9 @@
         border: 1px solid rgba(100, 181, 246, 0.3);
     }
 
-        .feature:hover {
-            transform: scale(1.05);
-        }
+    .feature:hover {
+        transform: scale(1.05);
+    }
 
     .feature-icon {
         font-size: 30px;
@@ -190,9 +190,9 @@
         transition: 0.3s;
     }
 
-        .logout-button:hover {
-            background: rgba(255,255,255,0.4);
-        }
+    .logout-button:hover {
+        background: rgba(255,255,255,0.4);
+    }
 
     .feature-link {
         text-decoration: none;
@@ -200,10 +200,10 @@
         display: block;
     }
 
-        .feature-link:hover .feature {
-            transform: scale(1.05);
-            box-shadow: 0 10px 20px rgba(102,126,234,0.3);
-        }
+    .feature-link:hover .feature {
+        transform: scale(1.05);
+        box-shadow: 0 10px 20px rgba(102,126,234,0.3);
+    }
 </style>
 
 <!-- Top bar -->
@@ -237,9 +237,13 @@
                 <div class="feature-text">High Score</div>
             </div>
         </a>
-        <div class="feature">
-            <div class="feature-icon">🧠</div>
-            <div class="feature-text">Brain Boost</div>
-        </div>
+        <a asp-page="/DailyQuiz" class="feature-link">
+            <div class="feature">
+                <div class="feature-icon">
+                    @(Model.DailyCompleted ? "✔️" : "🧠")
+                </div>
+                <div class="feature-text">Brain Boost</div>
+            </div>
+        </a>
     </div>
 </div>
