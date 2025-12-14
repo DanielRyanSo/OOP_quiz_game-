@@ -246,18 +246,19 @@ namespace OOP_Proj.Pages
                     break;
             }
 
-            // Integer-only division logic
             if (Operation == "divide")
             {
-                // choose divisor
                 _num2 = _rand.Next(min, max + 1);
                 if (_num2 == 0) _num2 = 1;
 
-                // choose integer quotient
                 int quotient = _rand.Next(min, max + 1);
 
-                // dividend = divisor * quotient (guaranteed integer result)
                 _num1 = quotient * _num2;
+            }
+            else if (Operation == "subtract")
+            {
+                _num2 = _rand.Next(min, max + 1);
+                _num1 = _rand.Next(_num2, max + _num2 + 1); // Ensure _num1 >= _num2
             }
             else
             {
@@ -275,13 +276,11 @@ namespace OOP_Proj.Pages
             Feedback = null;
             IsCorrectAnswer = false;
 
-            // Reset TimeRemaining for a fresh question
             TimeRemaining = TimeLimitSeconds;
 
             double correct = Calculate(_num1, _num2, Operation);
             Choices = GenerateChoices(correct);
 
-            // Update Question object (for OOP structure)
             CurrentQuestion = new Question
             {
                 Number1 = Number1,

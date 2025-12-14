@@ -189,7 +189,7 @@
             @{
                 var rank = 1;
             }
-            @foreach (var score in Model.Scores.OrderByDescending(s => s.Score))
+            @foreach (var score in Model.Scores.OrderByDescending(s => s.Score).Take(5))
             {
                 string rowClass = "";
                 if (rank == 1) rowClass = "gold";
